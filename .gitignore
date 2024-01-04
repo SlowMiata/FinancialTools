@@ -1,0 +1,4 @@
+*.csv
+SQLiteStudio.app
+.DS_Store
+Equity.db
