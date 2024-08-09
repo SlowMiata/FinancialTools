@@ -43,7 +43,7 @@ def get_default_parser():
     parser.add_argument('--force', action='store_true', dest='force', default=False, help='verbose')
     
     parser.add_argument('--start_date', dest='start_date', default="2013-01-01", help='start date (YYYY-MM-DD)')
-    parser.add_argument('--end_date', dest='end_date', default="2024-01-01", help='end date (YYYY-MM-DD)')
+    parser.add_argument('--end_date', dest='end_date', default="2025-01-01", help='end date (YYYY-MM-DD)')
     parser.add_argument('--tickers', dest='tickers', default=None, help='Tickers with | separator')
     
     return(parser)

@@ -16,7 +16,7 @@ import numpy as np
 import sqlite3
 
 # pip install pandas-datareader
-import pandas_datareader as pdr
+#import pandas_datareader as pdr
 
 import yfinance as yf
 
@@ -38,7 +38,7 @@ def download_data_to_csv(opt, list_of_tickers):
         df = get_daily_from_yahoo(ticker,opt.start_date,opt.end_date)
         #create a new column in the data frame for Ticker
         df['Ticker'] = ticker
-        ##create a new file for each ticker 
+        ##create a new file for each ticker P
         file = os.path.join(opt.output_dir, f"{ticker}_daily.csv")
         #turn the data frame into a csv file
         df.to_csv(file,sep=',')
@@ -95,8 +95,8 @@ def save_daily_data_to_sqlite(opt, daily_file_dir, list_of_tickers):
     
 def _test():
     ticker = 'MSFT'
-    start_date = '2020-01-01'
-    end_date = '2023-08-01'
+    start_date = '2023-01-01'
+    end_date = '2024-08-01'
 
     print (f"Testing getting data for {ticker}:")
     df = get_daily_from_yahoo(ticker, start_date, end_date)
