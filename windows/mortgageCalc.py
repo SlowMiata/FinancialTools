@@ -40,7 +40,7 @@ def calc_level_payment():
         lbl_total["text"] = f"{mtgCalc.calc_level_payment()}"
         
 ##predefined
-large_font = ("Helvetica", 16)
+large_font = ("Helvetica", 30)
 
 ##main frame
 window = Tk()
