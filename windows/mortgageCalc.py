@@ -27,10 +27,22 @@ def calc_level_payment():
     
     
     if loanAmount == "" or interestRate == "" or term == "":
-        lbl_error["text"] = "Please fill out all boxes"
+        lbl_error.config(text = "Please fill out all boxes")
+        return
     
-    elif not loanAmount.isdigit() or not term.isdigit():
-        lbl_error["text"] = "Please enter only numbers"
+    if not loanAmount.isdigit() or not term.isdigit():
+        lbl_error.config(text = "Please enter only numbers")
+        return
+    
+    if float(interestRate) <= 0 or float(interestRate) >= 1:
+        lbl_error.config(text="Interest rate must be between 0 and 1")
+        return
+
+    if int(term) <= 0:
+        lbl_error.config(text="Term must be positive")
+        return
+    
+    
     else:
         lbl_error["text"] = ""
         loanAmount = int(loanAmount)
@@ -39,7 +51,7 @@ def calc_level_payment():
         mtgCalc = MortgageCalculator(loan_amount= loanAmount, int_rate= interestRate, term= term)
         lbl_total["text"] = f"{mtgCalc.calc_level_payment()}"
         
-##predefined
+##predefined font
 large_font = ("Helvetica", 30)
 
 ##main frame
@@ -56,35 +68,49 @@ lbl_levelPayment.pack()
 frm_inputs = Frame(window, relief= RAISED)
 frm_inputs.pack()
 
+##loan amount input
 lbl_loanAmount = Label(master = frm_inputs,text="Enter Loan Amount:")
 ent_loanAmount = Entry(master = frm_inputs)
-
 
 lbl_loanAmount.grid(row = 0, column= 0, sticky= 'e')
 ent_loanAmount.grid(row = 0, column= 1 , sticky= "w")
 
+#interest rate input
 lbl_interestRate = Label(master = frm_inputs,text="Enter interest rate (decimal form):")
 ent_interestRate = Entry(master = frm_inputs)
 
 lbl_interestRate.grid(row= 1, column= 0, sticky= "e")
 ent_interestRate.grid(row = 1, column= 1, sticky= "w")
 
+#mortgage term input
 lbl_mortgageTerm = Label(master = frm_inputs,text="Enter mortgage term (in months):")
 ent_mortgageTerm = Entry(master = frm_inputs)
 
 lbl_mortgageTerm.grid(row= 2, column= 0, sticky= "e")
 ent_mortgageTerm.grid(row = 2, column= 1, sticky= "w")
 
+
+#calculate button
 btn_enter = Button(window, text = "Calculate", command= calc_level_payment)
 btn_enter.pack()
 
+
+#monthly payment option
 lbl_total = Label()
 lbl_total.pack()
 
+#error display
 lbl_error = Label()
 lbl_error.pack()
 
-
-
-
 window.mainloop()
+
+
+##OOP version
+#creating the main class
+# class App:
+#     def __init__(self, master):
+#         self.master = master
+#         self.master.title("Mortgage Calculator")
+#         self.master.geometry("1200x960")
+#         self.master.resizable (width = False, height = False)
