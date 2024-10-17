@@ -15,41 +15,61 @@ from mtgCalculator_AP import MortgageCalculator
 #functions
 
 def calc_level_payment():
-    
-    #need to check if the user has enter a character other than numbers
-    #need to check if the user has enter nothing
-
+    # Get input values and remove leading/trailing spaces
     loanAmount = ent_loanAmount.get().strip()
-    
     interestRate = ent_interestRate.get().strip()
     term = ent_mortgageTerm.get().strip()
-    
-    
-    
-    if loanAmount == "" or interestRate == "" or term == "":
-        lbl_error.config(text = "Please fill out all boxes")
-        return
-    
-    if not loanAmount.isdigit() or not term.isdigit():
-        lbl_error.config(text = "Please enter only numbers")
-        return
-    
-    if float(interestRate) <= 0 or float(interestRate) >= 1:
-        lbl_error.config(text="Interest rate must be between 0 and 1")
+
+    # 1. Check for empty or whitespace-only inputs
+    if not loanAmount or not interestRate or not term:
+        lbl_error.config(text="Please fill out all boxes")
         return
 
-    if int(term) <= 0:
-        lbl_error.config(text="Term must be positive")
+    # 2. Validate if loan amount and term are digits
+    if not loanAmount.isdigit() or not term.isdigit():
+        lbl_error.config(text="Loan amount and term must be whole numbers")
         return
-    
-    
-    else:
-        lbl_error["text"] = ""
-        loanAmount = int(loanAmount)
+
+    # 3. Validate if interest rate is a valid float
+    try:
         interestRate = float(interestRate)
-        term = int(term)
-        mtgCalc = MortgageCalculator(loan_amount= loanAmount, int_rate= interestRate, term= term)
-        lbl_total["text"] = f"{mtgCalc.calc_level_payment()}"
+    except ValueError:
+        lbl_error.config(text="Interest rate must be a valid decimal number")
+        return
+
+    # 4. Ensure input values are within logical ranges
+    loanAmount = int(loanAmount)
+    term = int(term)
+
+    if loanAmount <= 0:
+        lbl_error.config(text="Loan amount must be greater than 0")
+        return
+
+    if interestRate <= 0 or interestRate >= 1:
+        lbl_error.config(text="Interest rate must be between 0 and 1 (e.g., 0.05 for 5%)")
+        return
+
+    if term <= 0:
+        lbl_error.config(text="Term must be greater than 0")
+        return
+
+    if loanAmount > 1_000_000_000:
+        lbl_error.config(text="Loan amount too large")
+        return
+
+    if term > 1200:  # Example: No mortgage term longer than 100 years
+        lbl_error.config(text="Term is too long (max 1200 months)")
+        return
+
+    # 5. Calculate and display the monthly payment if all checks pass
+    lbl_error.config(text="")  # Clear any previous error message
+    mtgCalc = MortgageCalculator(loan_amount=loanAmount, int_rate=interestRate, term=term)
+    
+    try:
+        result = mtgCalc.calc_level_payment()  # Handle potential division by zero
+        lbl_total.config(text=f"Monthly Payment: {result:.2f}")
+    except ZeroDivisionError:
+        lbl_error.config(text="Calculation error: Check your input values")
         
 ##predefined font
 large_font = ("Helvetica", 30)
